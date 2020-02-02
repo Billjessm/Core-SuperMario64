@@ -1,0 +1,11 @@
+{
+  "name": "SuperMario64",
+  "version": "0.1.0",
+  "description": "",
+  "main": "SuperMario64.js",
+  "author": "SpiceyWolf, MelonSpeedsuns",
+  "credits": "",
+  "license": "GPL3",
+  "core": "SuperMario64",
+  "updateUrl": "https://raw.githubusercontent.com/hylian-modding/Core-SuperMario64/master/update.json"
+}
