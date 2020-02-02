@@ -1,6 +1,6 @@
 import { IModLoaderAPI, ICore } from 'modloader64_api/IModLoaderAPI';
 import IMemory from 'modloader64_api/IMemory';
-import * as API from './API/SM64/Imports';
+import * as API from './API/Imports';
 
 // ##################################################################
 // ##  Sub-Classes
