@@ -35,13 +35,14 @@ export interface IPlayer {
 }
 
 export interface IRuntime {
-  get_current_scene(): number;
   get_current_profile(): number;
+  get_current_scene(): number;
   star_count: number;
 }
 
 export interface ISM64Core {
-  mario: IPlayer;
+  player: IPlayer;
   runtime: IRuntime;
   save: IBuffered[];
+  version: apiEnum.GameVersion;
 }

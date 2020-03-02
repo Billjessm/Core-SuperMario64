@@ -1,189 +1,69 @@
-import { IModLoaderAPI, ICore } from 'modloader64_api/IModLoaderAPI';
-import IMemory from 'modloader64_api/IMemory';
+import { EventHandler, EventsClient } from 'modloader64_api/EventHandler';
+import {
+    IModLoaderAPI,
+    ICore,
+    ModLoaderEvents,
+} from 'modloader64_api/IModLoaderAPI';
+import { IRomHeader } from 'modloader64_api/IRomHeader';
 import * as API from './API/Imports';
-
-// ##################################################################
-// ##  Sub-Classes
-// ##################################################################
-
-export class SaveFile extends API.BufferObj implements API.IBuffered {
-    constructor(emu: IMemory, profile_instance: number) {
-        super(emu, profile_instance, 0x70);
-    }
-}
-
-// ##################################################################
-// ##  Primary-Classes
-// ##################################################################
-
-export class Mario extends API.BaseObj implements API.IPlayer {
-  private instance: number = global.ModLoader['SM64:mario'];
-  private pos_x_addr = 0x20;
-  private pos_y_addr = 0x24;
-  private pos_z_addr = 0x28;
-  private rot_x_addr = 0x54;
-  private rot_y_addr = 0x58;
-  private rot_z_addr = 0x5c;
-
-  get exists(): boolean {
-      return !(this.emulator.rdramRead32(this.instance) === 0x00000000);
-  }
-
-  get animation(): Buffer {
-      return Buffer.from([this.anim_frame, this.anim_id]);
-  }
-  set animation(val: Buffer) {
-      this.anim_frame = val[0];
-      this.anim_id = val[1];
-  }
-
-  get anim_frame(): number {
-      return 0;
-  }
-  set anim_frame(val: number) {
-      return;
-  }
-
-  get anim_id(): number {
-      return 0;
-  }
-  set anim_id(val: number) {
-      return;
-  }
-
-  get position(): Buffer {
-      return Buffer.from([this.pos_x, this.pos_y, this.pos_z]);
-  }
-  set position(val: Buffer) {
-      this.pos_x = val[0];
-      this.pos_y = val[1];
-      this.pos_z = val[2];
-  }
-
-  get pos_x(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.pos_x_addr);
-  }
-  set pos_x(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.pos_x_addr, val);
-  }
-
-  get pos_y(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.pos_y_addr);
-  }
-  set pos_y(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.pos_y_addr, val);
-  }
-
-  get pos_z(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.pos_z_addr);
-  }
-  set pos_z(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.pos_z_addr, val);
-  }
-
-  get rotation(): Buffer {
-      return Buffer.from([this.rot_x, this.rot_y, this.rot_z]);
-  }
-  set rotation(val: Buffer) {
-      this.rot_x = val[0];
-      this.rot_y = val[1];
-      this.rot_z = val[2];
-  }
-
-  get rot_x(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.rot_x_addr);
-  }
-  set rot_x(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.rot_x_addr, val);
-  }
-
-  get rot_y(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.rot_y_addr);
-  }
-  set rot_y(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.rot_y_addr, val);
-  }
-
-  get rot_z(): number {
-      return this.emulator.rdramReadPtr32(this.instance, this.rot_z_addr);
-  }
-  set rot_z(val: number) {
-      this.emulator.rdramWritePtr32(this.instance, this.rot_z_addr, val);
-  }
-
-  get cap(): number {
-      return 0;
-  }
-  set cap(val: number) {
-      return;
-  }
-}
-
-export class Runtime extends API.BaseObj implements API.IRuntime {
-  private cur_scene_addr = global.ModLoader['SM64:current_scene'];
-  private cur_prof_addr = global.ModLoader['SM64:current_profile'];
-  private star_count_addr = global.ModLoader['SM64:star_count'];
-
-  get_current_scene(): number {
-      return this.emulator.rdramRead16(this.cur_scene_addr);
-  }
-
-  get_current_profile(): number {
-      return this.emulator.rdramRead8(this.cur_prof_addr) - 1;
-  }
-
-  get star_count(): number {
-      return this.emulator.rdramRead16(this.star_count_addr);
-  }
-  set star_count(val: number) {
-      this.emulator.rdramWrite16(this.star_count_addr, val);
-  }
-}
+import * as CORE from './src/Imports';
 
 export class SuperMario64 implements ICore, API.ISM64Core {
-  header = 'SUPER MARIO 64';
-  ModLoader: IModLoaderAPI = {} as IModLoaderAPI;
-  eventTicks: Map<string, Function> = new Map<string, Function>();
+    header = 'SUPER MARIO 64';
+    ModLoader: IModLoaderAPI = {} as IModLoaderAPI;
+    eventTicks: Map<string, Function> = new Map<string, Function>();
+    rom_header!: IRomHeader;
 
-  mario!: API.IPlayer;
-  runtime!: API.IRuntime;
-  save!: API.IBuffered[];
+    player!: API.IPlayer;
+    runtime!: API.IRuntime;
+    save!: API.IBuffered[];
+    version!: API.GameVersion;
 
-  preinit(): void {
-      global.ModLoader['SM64:mario'] = 0x361158;
+    preinit(): void {
+        switch (this.rom_header.country_code) {
+            case 'J':
+                this.version = API.GameVersion.JP_1_0;
+                CORE.VersionHandler.load_jp_1_0();
+                break;
+            case 'P':
+                this.version = API.GameVersion.PAL_1_0;
+                CORE.VersionHandler.load_pal_1_0();
+                break;
+            case 'E':
+                this.version = API.GameVersion.USA_1_0;
+                CORE.VersionHandler.load_usa_1_0();
+                break;
+            default:
+                this.version = API.GameVersion.USA_1_0;
+                CORE.VersionHandler.load_usa_1_0();
+                break;
+        }
+    }
 
-      // Save Context
-      global.ModLoader['SM64:fileA'] = 0x207700;
-      global.ModLoader['SM64:fileB'] = 0x207770;
-      global.ModLoader['SM64:fileC'] = 0x2077e0;
-      global.ModLoader['SM64:fileD'] = 0x207850;
+    init(): void { }
 
-      // Floating Data
-      global.ModLoader['SM64:current_scene'] = 0x32ddf8;
-      global.ModLoader['SM64:current_profile'] = 0x32ddf5;
-      global.ModLoader['SM64:star_count'] = 0x33b21a;
-  }
+    postinit(): void {
+        this.player = new CORE.Player(this.ModLoader.emulator);
+        this.runtime = new CORE.Runtime(this.ModLoader.emulator);
+        this.save = [
+            new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_A]),
+            new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_B]),
+            new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_C]),
+            new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_D]),
+        ];
+    }
 
-  init(): void {}
+    onTick(): void {
+        this.eventTicks.forEach((value: Function, key: string) => {
+            value();
+        });
+    }
 
-  postinit(): void {
-      this.mario = new Mario(this.ModLoader.emulator);
-      this.runtime = new Runtime(this.ModLoader.emulator);
+    @EventHandler(ModLoaderEvents.ON_ROM_HEADER_PARSED)
+    onModLoader_RomHeaderParsed(header: Buffer) { }
 
-      // Save Context
-      this.save = [
-          new SaveFile(this.ModLoader.emulator, global.ModLoader['SM64:fileA']),
-          new SaveFile(this.ModLoader.emulator, global.ModLoader['SM64:fileB']),
-          new SaveFile(this.ModLoader.emulator, global.ModLoader['SM64:fileC']),
-          new SaveFile(this.ModLoader.emulator, global.ModLoader['SM64:fileD']),
-      ];
-  }
-
-  onTick(): void {
-      this.eventTicks.forEach((value: Function, key: string) => {
-          value();
-      });
-  }
+    @EventHandler(EventsClient.ON_INJECT_FINISHED)
+    onCore_InjectFinished(evt: any) { }
 }
 
 export default SuperMario64;
