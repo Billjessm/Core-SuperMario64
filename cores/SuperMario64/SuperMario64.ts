@@ -80,17 +80,17 @@ export class SuperMario64 implements ICore, API.ISM64Core {
         this.ModLoader.emulator.rdramWriteBuffer(0x801000, funLogic);
         
         // Inject puppet behavior
-        this.ModLoader.emulator.rdramWrite32(0x800004, 0x00000000);
-        this.ModLoader.emulator.rdramWrite32(0x800008, 0x11012001);
-        this.ModLoader.emulator.rdramWrite32(0x80000C, 0x23000000);
-        this.ModLoader.emulator.rdramWrite32(0x800010, 0x002500A0);
-        this.ModLoader.emulator.rdramWrite32(0x800014, 0x2F000000);
-        this.ModLoader.emulator.rdramWrite32(0x800018, 0x00100000);
-        this.ModLoader.emulator.rdramWrite32(0x80001C, 0x11030001);
-        this.ModLoader.emulator.rdramWrite32(0x800020, 0x08000000);
-        this.ModLoader.emulator.rdramWrite32(0x800024, 0x10050000);
-        this.ModLoader.emulator.rdramWrite32(0x800028, 0x101D0000);
-        this.ModLoader.emulator.rdramWrite32(0x80002C, 0x09000000);
+        this.ModLoader.emulator.rdramWrite32(0x800000, 0x00000000);
+        this.ModLoader.emulator.rdramWrite32(0x800004, 0x11012001);
+        this.ModLoader.emulator.rdramWrite32(0x800008, 0x23000000);
+        this.ModLoader.emulator.rdramWrite32(0x80000C, 0x002500A0);
+        this.ModLoader.emulator.rdramWrite32(0x800010, 0x2F000000);
+        this.ModLoader.emulator.rdramWrite32(0x800014, 0x00100000);
+        this.ModLoader.emulator.rdramWrite32(0x800018, 0x11030001);
+        this.ModLoader.emulator.rdramWrite32(0x80001C, 0x08000000);
+        this.ModLoader.emulator.rdramWrite32(0x800020, 0x10050000);
+        this.ModLoader.emulator.rdramWrite32(0x800024, 0x101D0000);
+        this.ModLoader.emulator.rdramWrite32(0x800028, 0x09000000);
 
         // Inject commandBuffer and hooks
         for (let i = 0; i < this.payloads.length; i++) {
