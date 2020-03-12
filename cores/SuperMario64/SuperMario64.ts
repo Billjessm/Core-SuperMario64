@@ -45,7 +45,8 @@ export class SuperMario64 implements ICore, API.ISM64Core {
     }
 
     init(): void { 
-        this.payloads.push(__dirname + '/src/SuperMario64.payload');
+        this.payloads.push(__dirname + '/src/asm/Hooks.payload');
+        this.payloads.push(__dirname + '/src/asm/SuperMario64.payload');
     }
 
     postinit(): void {
