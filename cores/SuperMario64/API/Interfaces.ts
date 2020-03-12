@@ -1,5 +1,6 @@
 import * as apiBit from './Bitmaps';
 import * as apiEnum from './Enums';
+import { ICommandBuffer } from './ICommandBuffer';
 
 // ##################################################################
 // ##  Sub-Classes
@@ -45,4 +46,5 @@ export interface ISM64Core {
   runtime: IRuntime;
   save: IBuffered[];
   version: apiEnum.GameVersion;
+  commandBuffer: ICommandBuffer;
 }

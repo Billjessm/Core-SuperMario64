@@ -1,10 +1,5 @@
 import IMemory from "modloader64_api/IMemory";
-
-export const enum CMD {
-    EMPTY = 0x00000000,
-    SPAWN = 0x00000001,
-    DESPAWN = 0x00000002,
-}
+import { CMD, ICommandBuffer } from '../API/ICommandBuffer';
 
 export class Slot {
     private readonly emu: IMemory;
@@ -37,7 +32,7 @@ export class Slot {
     }
 }
 
-export class CommandBuffer {
+export class CommandBuffer implements ICommandBuffer {
     private readonly list_addr = 0x803000;
     private readonly slots: Slot[] = new Array<Slot>(16);
 
