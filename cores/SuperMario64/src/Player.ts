@@ -2,9 +2,9 @@ import * as API from '../API/Imports';
 
 export class Player extends API.BaseObj implements API.IPlayer {
     private instance: number = global.ModLoader[API.AddressType.PLAYER];
-    private pos_x_addr = 0x20;
-    private pos_y_addr = 0x24;
-    private pos_z_addr = 0x28;
+    private pos_x_addr = 0xA0;
+    private pos_y_addr = 0xA4;
+    private pos_z_addr = 0xA8;
     private rot_x_addr = 0x54;
     private rot_y_addr = 0x58;
     private rot_z_addr = 0x5c;
