@@ -2,6 +2,7 @@ import * as API from '../API/Imports';
 
 export class Player extends API.BaseObj implements API.IPlayer {
     private instance: number = global.ModLoader[API.AddressType.PLAYER];
+    private height_addr = 0x3A;
     private pos_x_addr = 0xA0;
     private pos_y_addr = 0xA4;
     private pos_z_addr = 0xA8;
@@ -35,64 +36,79 @@ export class Player extends API.BaseObj implements API.IPlayer {
         return;
     }
 
+    get height(): number {
+        return this.emulator.rdramReadPtrF32(this.instance, this.height_addr);
+    }
+    set height(val: number) {
+        this.emulator.rdramWritePtrF32(this.instance, this.height_addr, val);
+    }
+
     get position(): Buffer {
-        return Buffer.from([this.pos_x, this.pos_y, this.pos_z]);
+        let buf: Buffer = Buffer.alloc(12);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_x_addr), 0);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_y_addr), 4);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_z_addr), 8);
+        return buf;
     }
     set position(val: Buffer) {
-        this.pos_x = val[0];
-        this.pos_y = val[1];
-        this.pos_z = val[2];
+        this.emulator.rdramWritePtrBuffer(this.instance, this.pos_x_addr, val.slice(0, 4));
+        this.emulator.rdramWritePtrBuffer(this.instance, this.pos_y_addr, val.slice(4, 8));
+        this.emulator.rdramWritePtrBuffer(this.instance, this.pos_z_addr, val.slice(8, 12));
     }
 
     get pos_x(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.pos_x_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.pos_x_addr);
     }
     set pos_x(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.pos_x_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.pos_x_addr, val);
     }
 
     get pos_y(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.pos_y_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.pos_y_addr);
     }
     set pos_y(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.pos_y_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.pos_y_addr, val);
     }
 
     get pos_z(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.pos_z_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.pos_z_addr);
     }
     set pos_z(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.pos_z_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.pos_z_addr, val);
     }
 
     get rotation(): Buffer {
-        return Buffer.from([this.rot_x, this.rot_y, this.rot_z]);
+        let buf: Buffer = Buffer.alloc(12);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_x_addr), 0);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_y_addr), 4);
+        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_z_addr), 8);
+        return buf;
     }
     set rotation(val: Buffer) {
-        this.rot_x = val[0];
-        this.rot_y = val[1];
-        this.rot_z = val[2];
+        this.emulator.rdramWritePtrBuffer(this.instance, this.rot_x_addr, val.slice(0, 4));
+        this.emulator.rdramWritePtrBuffer(this.instance, this.rot_y_addr, val.slice(4, 8));
+        this.emulator.rdramWritePtrBuffer(this.instance, this.rot_z_addr, val.slice(8, 12));
     }
 
     get rot_x(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.rot_x_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.rot_x_addr);
     }
     set rot_x(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.rot_x_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.rot_x_addr, val);
     }
 
     get rot_y(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.rot_y_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.rot_y_addr);
     }
     set rot_y(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.rot_y_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.rot_y_addr, val);
     }
 
     get rot_z(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.rot_z_addr);
+        return this.emulator.rdramReadPtrF32(this.instance, this.rot_z_addr);
     }
     set rot_z(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.rot_z_addr, val);
+        this.emulator.rdramWritePtrF32(this.instance, this.rot_z_addr, val);
     }
 
     get cap(): number {
