@@ -1,7 +1,7 @@
 mario_behavior equ 0x00800000 //ram offset of mario behav. do not include 0x80 at beginning!
 
 .n64
-.create "0x803000.bin",0
+.create "0x802000.bin",0
 .headersize 0x80245000
 
 pointer_code:
