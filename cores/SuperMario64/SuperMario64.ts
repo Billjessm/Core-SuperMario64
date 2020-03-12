@@ -75,6 +75,21 @@ export class SuperMario64 implements ICore, API.ISM64Core {
 
     @EventHandler(EventsClient.ON_INJECT_FINISHED)
     onCore_InjectFinished(evt: any) {
+        // Inject puppet behavior
+        this.ModLoader.emulator.rdramWrite32(0x800004, 0x00000000);
+        this.ModLoader.emulator.rdramWrite32(0x800008, 0x11012001);
+        this.ModLoader.emulator.rdramWrite32(0x80000C, 0x23000000);
+        this.ModLoader.emulator.rdramWrite32(0x800000, 0x002500A0);
+        this.ModLoader.emulator.rdramWrite32(0x800004, 0x2F000000);
+        this.ModLoader.emulator.rdramWrite32(0x800008, 0x00100000);
+        this.ModLoader.emulator.rdramWrite32(0x80000C, 0x11030001);
+        this.ModLoader.emulator.rdramWrite32(0x800000, 0x08000000);
+        this.ModLoader.emulator.rdramWrite32(0x800004, 0x10050000);
+        this.ModLoader.emulator.rdramWrite32(0x800008, 0x101D0000);
+        this.ModLoader.emulator.rdramWrite32(0x80000C, 0x09000000);
+
+
+        // Inject commandBuffer and hooks
         for (let i = 0; i < this.payloads.length; i++) {
             this.ModLoader.payloadManager.parseFile(this.payloads[i]);
         }
