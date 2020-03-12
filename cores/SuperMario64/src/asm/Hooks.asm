@@ -3,9 +3,6 @@ copied_code equ 0x80801000 //ram offset of the code you guys are copying from th
 
 .n64
 .create "0x2CB1C0.bin",0
-.headersize 0x80245000
-
-.orga 0x861C0
 
 ADDIU SP, SP, 0xFFE8
 SW RA, 0x14(SP)
