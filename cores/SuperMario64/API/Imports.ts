@@ -3,6 +3,7 @@ import { FlagManager } from 'modloader64_api/FlagManager';
 
 export * from './Bitmaps';
 export * from './Enums';
+export * from './ICommandBuffer';
 export * from './Interfaces';
 
 export class BaseObj {
