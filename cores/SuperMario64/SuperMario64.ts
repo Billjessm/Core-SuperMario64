@@ -4,6 +4,7 @@ import {
     ICore,
     ModLoaderEvents,
 } from 'modloader64_api/IModLoaderAPI';
+import { CommandBuffer } from './src/CommandBuffer';
 import { IRomHeader } from 'modloader64_api/IRomHeader';
 import * as API from './API/Imports';
 import * as CORE from './src/Imports';
@@ -18,6 +19,9 @@ export class SuperMario64 implements ICore, API.ISM64Core {
     runtime!: API.IRuntime;
     save!: API.IBuffered[];
     version!: API.GameVersion;
+
+    commandBuffer!: CommandBuffer;
+    payloads: string[] = new Array<string>();
 
     preinit(): void {
         switch (this.rom_header.country_code) {
@@ -40,7 +44,9 @@ export class SuperMario64 implements ICore, API.ISM64Core {
         }
     }
 
-    init(): void { }
+    init(): void { 
+        this.payloads.push(__dirname + '/src/SuperMario64.payload');
+    }
 
     postinit(): void {
         this.player = new CORE.Player(this.ModLoader.emulator);
@@ -51,6 +57,10 @@ export class SuperMario64 implements ICore, API.ISM64Core {
             new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_C]),
             new CORE.SaveFile(this.ModLoader.emulator, global.ModLoader[API.AddressType.FILE_D]),
         ];
+        this.commandBuffer = new CommandBuffer(this.ModLoader.emulator);
+        this.eventTicks.set('coreCommandBuffer', () => {
+            this.commandBuffer.onTick();
+        });
     }
 
     onTick(): void {
@@ -63,7 +73,11 @@ export class SuperMario64 implements ICore, API.ISM64Core {
     onModLoader_RomHeaderParsed(header: Buffer) { }
 
     @EventHandler(EventsClient.ON_INJECT_FINISHED)
-    onCore_InjectFinished(evt: any) { }
+    onCore_InjectFinished(evt: any) {
+        for (let i = 0; i < this.payloads.length; i++) {
+            this.ModLoader.payloadManager.parseFile(this.payloads[i]);
+        }
+    }
 }
 
 export default SuperMario64;
