@@ -75,6 +75,11 @@ export class SuperMario64 implements ICore, API.ISM64Core {
 
     @EventHandler(EventsClient.ON_INJECT_FINISHED)
     onCore_InjectFinished(evt: any) {
+        // Clone old game-logic function to hook space (Romhack compatibility)
+        let funLogic = this.ModLoader.emulator.rdramReadBuffer(0x2CB1C0, 0x1000);
+        this.ModLoader.emulator.rdramWrite32(0x801000, 0x03E00008); // Jump return
+        this.ModLoader.emulator.rdramWriteBuffer(0x801004, funLogic);
+        
         // Inject puppet behavior
         this.ModLoader.emulator.rdramWrite32(0x800004, 0x00000000);
         this.ModLoader.emulator.rdramWrite32(0x800008, 0x11012001);
@@ -87,7 +92,6 @@ export class SuperMario64 implements ICore, API.ISM64Core {
         this.ModLoader.emulator.rdramWrite32(0x800004, 0x10050000);
         this.ModLoader.emulator.rdramWrite32(0x800008, 0x101D0000);
         this.ModLoader.emulator.rdramWrite32(0x80000C, 0x09000000);
-
 
         // Inject commandBuffer and hooks
         for (let i = 0; i < this.payloads.length; i++) {
