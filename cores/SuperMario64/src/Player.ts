@@ -8,7 +8,6 @@ export class Player extends API.BaseObj implements API.IPlayer {
     private rot_x_addr = 0xD0;
     private rot_y_addr = 0xD4;
     private rot_z_addr = 0xD8;
-    private height_addr = 0xDC;
 
     get exists(): boolean {
         return this.emulator.rdramRead32(this.instance) !== 0x0;
@@ -36,18 +35,11 @@ export class Player extends API.BaseObj implements API.IPlayer {
         return;
     }
 
-    get height(): number {
-        return this.emulator.rdramReadPtr32(this.instance, this.height_addr);
-    }
-    set height(val: number) {
-        this.emulator.rdramWritePtr32(this.instance, this.height_addr, val);
-    }
-
     get position(): Buffer {
         let buf: Buffer = Buffer.alloc(12);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_x_addr), 0);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_y_addr), 4);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.pos_z_addr), 8);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.pos_x_addr), 0);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.pos_y_addr), 4);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.pos_z_addr), 8);
         return buf;
     }
     set position(val: Buffer) {
@@ -57,21 +49,21 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
 
     get pos_x(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.pos_x_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.pos_x_addr);
     }
     set pos_x(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.pos_x_addr, val);
     }
 
     get pos_y(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.pos_y_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.pos_y_addr);
     }
     set pos_y(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.pos_y_addr, val);
     }
 
     get pos_z(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.pos_z_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.pos_z_addr);
     }
     set pos_z(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.pos_z_addr, val);
@@ -79,9 +71,9 @@ export class Player extends API.BaseObj implements API.IPlayer {
 
     get rotation(): Buffer {
         let buf: Buffer = Buffer.alloc(12);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_x_addr), 0);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_y_addr), 4);
-        buf.writeFloatBE(this.emulator.rdramReadPtrF32(this.instance, this.rot_z_addr), 8);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.rot_x_addr), 0);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.rot_y_addr), 4);
+        buf.writeUInt32BE(this.emulator.rdramReadPtr32(this.instance, this.rot_z_addr), 8);
         return buf;
     }
     set rotation(val: Buffer) {
@@ -91,21 +83,21 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
 
     get rot_x(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.rot_x_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.rot_x_addr);
     }
     set rot_x(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.rot_x_addr, val);
     }
 
     get rot_y(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.rot_y_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.rot_y_addr);
     }
     set rot_y(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.rot_y_addr, val);
     }
 
     get rot_z(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.rot_z_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.rot_z_addr);
     }
     set rot_z(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.rot_z_addr, val);

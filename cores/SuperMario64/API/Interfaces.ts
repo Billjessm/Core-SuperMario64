@@ -24,7 +24,6 @@ export interface IPlayer {
   animation: Buffer;
   anim_frame: number;
   anim_id: number;
-  height: number;
   position: Buffer;
   pos_x: number;
   pos_y: number;
