@@ -2,13 +2,13 @@ import * as API from '../API/Imports';
 
 export class Player extends API.BaseObj implements API.IPlayer {
     private instance: number = global.ModLoader[API.AddressType.PLAYER];
-    private height_addr = 0x3A;
     private pos_x_addr = 0xA0;
     private pos_y_addr = 0xA4;
     private pos_z_addr = 0xA8;
     private rot_x_addr = 0xD0;
     private rot_y_addr = 0xD4;
     private rot_z_addr = 0xD8;
+    private height_addr = 0xDC;
 
     get exists(): boolean {
         return this.emulator.rdramRead32(this.instance) !== 0x0;
@@ -37,10 +37,10 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
 
     get height(): number {
-        return this.emulator.rdramReadPtrF32(this.instance, this.height_addr);
+        return this.emulator.rdramReadPtr32(this.instance, this.height_addr);
     }
     set height(val: number) {
-        this.emulator.rdramWritePtrF32(this.instance, this.height_addr, val);
+        this.emulator.rdramWritePtr32(this.instance, this.height_addr, val);
     }
 
     get position(): Buffer {
