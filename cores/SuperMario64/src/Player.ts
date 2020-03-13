@@ -16,7 +16,7 @@ export class Player extends API.BaseObj implements API.IPlayer {
 
     get animation(): Buffer {
         let anim_data_ptr = this.emulator.rdramReadPtr32(this.instance, this.anim_addr);
-        let anim_size = this.emulator.rdramReadPtr32(anim_data_ptr, 0x14);
+        let anim_size = this.emulator.rdramRead32(anim_data_ptr + 0x14);
         return this.emulator.rdramReadBuffer(anim_data_ptr, anim_size);
     }
     set animation(val: Buffer) {
