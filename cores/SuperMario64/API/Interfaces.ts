@@ -22,6 +22,7 @@ export interface IBuffered {
 export interface IPlayer {
   exists: boolean;
   animation: Buffer;
+  anim_frame: number;
   position: Buffer;
   pos_x: number;
   pos_y: number;

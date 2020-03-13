@@ -3,6 +3,7 @@ import * as API from '../API/Imports';
 export class Player extends API.BaseObj implements API.IPlayer {
     private instance: number = global.ModLoader[API.AddressType.PLAYER];
     private anim_addr = 0x3C;
+    private anim_frame_addr = 0x40;
     private pos_x_addr = 0xA0;
     private pos_y_addr = 0xA4;
     private pos_z_addr = 0xA8;
@@ -19,17 +20,21 @@ export class Player extends API.BaseObj implements API.IPlayer {
         let anim_size = this.emulator.rdramRead32(anim_data_ptr + 0x14);
         let v_ptr = anim_data_ptr & 0x00FFFFFF;
 
-        let val1 = this.emulator.rdramRead32(anim_data_ptr + 0x0C) - v_ptr;
-        let val2 = this.emulator.rdramRead32(anim_data_ptr + 0x10) - v_ptr;
-
         let ret = this.emulator.rdramReadBuffer(anim_data_ptr, anim_size);
-        ret.writeUInt32BE(val1, 0x0C);
-        ret.writeUInt32BE(val2, 0x10);
+        ret.writeUInt32BE(ret.readUInt32BE(0x0C) - v_ptr, 0x0C);
+        ret.writeUInt32BE(ret.readUInt32BE(0x10) - v_ptr, 0x10);
 
         return ret;
     }
     set animation(val: Buffer) {
         // Do nothing until further notice
+    }
+
+    get anim_frame(): number {
+        return this.emulator.rdramReadPtr16(this.instance, this.anim_frame_addr);
+    }
+    set anim_frame(val: number) {
+        this.emulator.rdramWritePtr16(this.instance, this.anim_frame_addr, val);
     }
 
     get position(): Buffer {
