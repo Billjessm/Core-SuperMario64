@@ -19,17 +19,22 @@ export class Player extends API.BaseObj implements API.IPlayer {
     get animation(): Buffer {
         let anim_data_ptr = this.emulator.rdramReadPtr32(this.instance, this.anim_addr);
         let anim_size = this.emulator.rdramRead32(anim_data_ptr + 0x14);
-        let frame = this.emulator.rdramReadPtr16(this.instance, this.anim_frame_addr);
         let v_ptr = anim_data_ptr & 0x00FFFFFF;
 
-        let ret = this.emulator.rdramReadBuffer(anim_data_ptr, anim_size + 2);
+        let ret = this.emulator.rdramReadBuffer(anim_data_ptr, anim_size);
         ret.writeUInt32BE(ret.readUInt32BE(0x0C) - v_ptr, 0x0C);
         ret.writeUInt32BE(ret.readUInt32BE(0x10) - v_ptr, 0x10);
-        ret.writeUInt16BE(frame, anim_size);
         return ret;
     }
     set animation(val: Buffer) {
         // Do nothing until further notice
+    }
+
+    get animation_frame(): number {
+        return this.emulator.rdramReadPtr16(this.instance, this.anim_frame_addr);
+    }
+    set animation_frame(val: number) {
+        this.emulator.rdramWritePtr16(this.instance, this.anim_frame_addr, val);
     }
 
     get cap(): number {
