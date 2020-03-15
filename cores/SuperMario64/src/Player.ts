@@ -108,9 +108,9 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
 
     get visible(): boolean {
-        return this.emulator.rdramReadPtr8(this.instance, this.visible_addr) === 0x21;
+        return this.emulator.rdramReadPtr16(this.instance, this.visible_addr) === 0x21;
     }
     set visible(val: boolean) {
-        this.emulator.rdramWritePtr8(this.instance, this.visible_addr, val ? 0x21 : 0x20)
+        this.emulator.rdramWritePtr16(this.instance, this.visible_addr, val ? 0x21 : 0x20)
     }    
 }  
