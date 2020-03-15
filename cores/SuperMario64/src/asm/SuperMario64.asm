@@ -83,33 +83,38 @@ NOP
 JAL 0x8029E27C
 NOP
 
-LI.S F1, 90
+LI.S F1, 100
+C.LT.S F1, F0
+LUI T0, 0x8036
+BC1T end
+LW A0, 0x1158(T0)
+LW A1, 0x78(A0) //radius check
+
+JAL 0x8029E2F8
+NOP
+
+LI.S F1, 180
 C.LT.S F1, F0
 LUI T0, 0x8036
 BC1T end
 LW T0, 0x1158(T0)
-LW T1, 0x78(T0) //radius check
+LW T1, 0x78(T0) //dist check
 
 LWC1 F2, 0xB0(T0)
 MTC1 R0, F3
 C.LE.S F2, F3
-LWC1 F1, 0xA4(T0)
+LUI T5, 0x8034
 BC1F end
-LWC1 F2, 0xA4(T1) //speed <= 0 check
+LUI T6, 0x0100
 
-LI.S F3, 150
+LWC1 F1, 0xA4(T0)
+LWC1 F2, 0xA4(T1) //speed <= 0 check
+LI.S F3, 120
 ADD.S F2, F2, F3
 C.LT.S F1, F2
-LUI T5, 0x8034
-BC1T end
-LUI T6, 0x0100 //height to puppet >150 check
-
-LI.S F3, 20
-ADD.S F2, F2, F3
-C.LT.S F2, F1
 ORI T6, T6, 0x0882
 BC1T end
-LUI T7, 0x4248 //height to puppet <170 check
+LUI T7, 0x4248 //height to puppet >150 check
 
 SW T6, 0xB17C(T5)
 SW T7, 0xB1BC(T5) //bounce
