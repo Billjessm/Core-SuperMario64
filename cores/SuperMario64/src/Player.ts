@@ -10,6 +10,7 @@ export class Player extends API.BaseObj implements API.IPlayer {
     private rot_x_addr = 0xD0;
     private rot_y_addr = 0xD4;
     private rot_z_addr = 0xD8;
+    private visible_addr = 0x02;
 
     get exists(): boolean {
         return this.emulator.rdramRead32(this.instance) !== 0x0;
@@ -29,6 +30,13 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
     set animation(val: Buffer) {
         // Do nothing until further notice
+    }
+
+    get cap(): number {
+        return 0;
+    }
+    set cap(val: number) {
+        return;
     }
 
     get position(): Buffer {
@@ -99,10 +107,10 @@ export class Player extends API.BaseObj implements API.IPlayer {
         this.emulator.rdramWritePtrF32(this.instance, this.rot_z_addr, val);
     }
 
-    get cap(): number {
-        return 0;
+    get visible(): boolean {
+        return this.emulator.rdramReadPtr8(this.instance, this.visible_addr) === 0x21;
     }
-    set cap(val: number) {
-        return;
-    }
+    set visible(val: boolean) {
+        this.emulator.rdramWritePtr8(this.instance, this.visible_addr, val ? 0x21 : 0x20)
+    }    
 }  

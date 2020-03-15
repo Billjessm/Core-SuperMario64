@@ -22,6 +22,7 @@ export interface IBuffered {
 export interface IPlayer {
   exists: boolean;
   animation: Buffer;
+  cap: number;
   position: Buffer;
   pos_x: number;
   pos_y: number;
@@ -30,7 +31,7 @@ export interface IPlayer {
   rot_x: number;
   rot_y: number;
   rot_z: number;
-  cap: number;
+  visible: boolean;
 }
 
 export interface IRuntime {
