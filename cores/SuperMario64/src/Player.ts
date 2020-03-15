@@ -10,6 +10,7 @@ export class Player extends API.BaseObj implements API.IPlayer {
     private rot_x_addr = 0xD0;
     private rot_y_addr = 0xD4;
     private rot_z_addr = 0xD8;
+    private translucency_addr = 0x017c;
     private visible_addr = 0x02;
 
     get exists(): boolean {
@@ -110,6 +111,13 @@ export class Player extends API.BaseObj implements API.IPlayer {
     }
     set rot_z(val: number) {
         this.emulator.rdramWritePtrF32(this.instance, this.rot_z_addr, val);
+    }
+
+    get translucency(): number {
+        return this.emulator.rdramReadPtr32(this.instance, this.translucency_addr);
+    }
+    set translucency(val: number) {
+        this.emulator.rdramWritePtr32(this.instance, this.translucency_addr, val);
     }
 
     get visible(): boolean {

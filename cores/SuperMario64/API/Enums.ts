@@ -9,6 +9,7 @@ export const enum AddressType {
 
 	CURRENT_PROFILE = 'SM64:current_profile',
 	CURRENT_SCENE = 'SM64:current_scene',
+	PAUSE_SCREEN = 'SM64:pause_visible',
 	STAR_COUNT = 'SM64:star_count',
 
 	FILE_A = 'SM64:fileA',

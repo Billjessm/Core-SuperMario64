@@ -32,12 +32,14 @@ export interface IPlayer {
   rot_x: number;
   rot_y: number;
   rot_z: number;
+  translucency: number;
   visible: boolean;
 }
 
 export interface IRuntime {
   get_current_profile(): number;
   get_current_scene(): number;
+  get_is_paused(): boolean;
   star_count: number;
 }
 

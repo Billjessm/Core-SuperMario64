@@ -8,6 +8,7 @@ export namespace VersionHandler {
 		// // Runtime Data
 		// global.ModLoader[API.AddressType.CURRENT_PROFILE] = 0x32ddf5;
 		// global.ModLoader[API.AddressType.CURRENT_SCENE] = 0x32ddf8;
+		// global.ModLoader[API.AddressType.PAUSE_SCREEN] = 0x3314f8;
 		// global.ModLoader[API.AddressType.STAR_COUNT] = 0x33b21a;
 
 		// Save Data        
@@ -24,6 +25,7 @@ export namespace VersionHandler {
 		// // Runtime Data
 		// global.ModLoader[API.AddressType.CURRENT_PROFILE] = 0x32ddf5;
 		// global.ModLoader[API.AddressType.CURRENT_SCENE] = 0x32ddf8;
+		// global.ModLoader[API.AddressType.PAUSE_SCREEN] = 0x3314f8;
 		// global.ModLoader[API.AddressType.STAR_COUNT] = 0x33b21a;
 
 		// Save Data        
@@ -40,6 +42,7 @@ export namespace VersionHandler {
 		// // Runtime Data
 		global.ModLoader[API.AddressType.CURRENT_PROFILE] = 0x32ddf5;
 		global.ModLoader[API.AddressType.CURRENT_SCENE] = 0x32ddf8;
+		global.ModLoader[API.AddressType.PAUSE_SCREEN] = 0x3314f8;
 		global.ModLoader[API.AddressType.STAR_COUNT] = 0x33b21a;
 
 		// Save Data        
