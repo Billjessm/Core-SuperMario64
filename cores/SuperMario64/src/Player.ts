@@ -30,11 +30,11 @@ export class Player extends API.BaseObj implements API.IPlayer {
         // Do nothing until further notice
     }
 
-    get animation_frame(): number {
-        return this.emulator.rdramReadPtr16(this.instance, this.anim_frame_addr);
+    get animation_frame(): Buffer {
+        return this.emulator.rdramReadPtrBuffer(this.instance, this.anim_frame_addr, 8);
     }
-    set animation_frame(val: number) {
-        this.emulator.rdramWritePtr16(this.instance, this.anim_frame_addr, val);
+    set animation_frame(val: Buffer) {
+        this.emulator.rdramWritePtrBuffer(this.instance, this.anim_frame_addr, val);
     }
 
     get cap(): number {
@@ -118,4 +118,4 @@ export class Player extends API.BaseObj implements API.IPlayer {
     set visible(val: boolean) {
         this.emulator.rdramWritePtr16(this.instance, this.visible_addr, val ? 0x21 : 0x20)
     }    
-}  
+}
