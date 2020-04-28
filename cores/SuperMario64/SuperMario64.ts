@@ -10,7 +10,7 @@ import * as API from './API/Imports';
 import * as CORE from './src/Imports';
 
 export class SuperMario64 implements ICore, API.ISM64Core {
-    header = 'SUPER MARIO 64';
+    header = 'NSM';
     ModLoader: IModLoaderAPI = {} as IModLoaderAPI;
     eventTicks: Map<string, Function> = new Map<string, Function>();
     rom_header!: IRomHeader;
